@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="fin" targetNamespace="http://fin" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://fin" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="finHttpBinding" originalBindingStyle="document"/>
+        <generatedXSD location="fin_InlineSchema1.xsd"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  
+  
+  
+  <wsdl:types>
+    
+        <xsd:schema targetNamespace="http://fin" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions">
+      <xsd:include schemaLocation="fin_InlineSchema1.xsd"/>
+    </xsd:schema>
+    </wsdl:types>
+  <wsdl:message name="rateRequestMsg">
+    <wsdl:part element="tns:rate" name="rateParameters"/>
+  </wsdl:message>
+  <wsdl:message name="rateResponseMsg">
+    <wsdl:part element="tns:rateResponse" name="rateResult"/>
+  </wsdl:message>
+  <wsdl:portType name="fin">
+    <wsdl:operation name="rate">
+            <wsdl:input message="tns:rateRequestMsg" name="rateRequest"/>
+            <wsdl:output message="tns:rateResponseMsg" name="rateResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+    <wsdl:binding name="finHttpBinding" type="tns:fin">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="rate">
+      <soap12:operation soapAction="http://fin/fin/rate"/>
+      <wsdl:input name="rateRequest">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="rateResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+    <wsdl:service name="finHttpService">
+    <wsdl:port binding="tns:finHttpBinding" name="finHttpPort">
+      <soap12:address location="/fin"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,69 @@
+BROKER SCHEMA gen
+DECLARE ns NAMESPACE 'http://fin';
+
+
+CREATE COMPUTE MODULE rate_Request_Response_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE noOfInstallments INT InputRoot.XMLNSC.ns:rate.noOfInstallments;
+		DECLARE emiAmount FLOAT InputRoot.XMLNSC.ns:rate.emiAmount;
+		DECLARE loanAmount FLOAT InputRoot.XMLNSC.ns:rate.loanAmount;
+		DECLARE interestRate FLOAT;
+		
+		SET OutputRoot.XMLNSC.ns:rateResponse.rate = getAnnualRate(noOfInstallments, emiAmount, loanAmount);
+		
+		RETURN TRUE;
+	END;
+
+
+	CREATE FUNCTION getAnnualRate(IN nper INT, IN inPMT FLOAT, IN pv FLOAT) RETURNS FLOAT
+	BEGIN
+		DECLARE MAX_ITERATIONS INT 20;
+		DECLARE ACCEPTIBLE_PRECISION FLOAT 0.0000001;
+		
+		DECLARE I INT 1;
+		DECLARE y, y0, y1, x0, x1, f, rate, pmt FLOAT;
+		
+		-- the rest of the computation works provided the pmt is represented as a negative number
+		IF inPMT > 0 THEN
+			SET pmt = -1 * inPMT;
+		ELSE
+			SET pmt = inPMT;
+		END IF;
+		
+		-- this is the standard method
+		SET rate = 0.01;
+		SET f = 0;
+		SET x1 = 0;
+		
+		SET f = EXP(nper * LN(1 + rate));
+        SET y = pv * f + pmt * (1 / rate) * (f - 1);
+        
+        SET y0 = pv + pmt * nper;
+    	SET y1 = y;
+    	
+    	SET x0 = 0.0;
+    	SET x1 = rate;
+    	
+    	WHILE ((ABS(y0 - y1) > ACCEPTIBLE_PRECISION) AND (I < MAX_ITERATIONS)) DO
+
+	        SET rate = (y1 * x0 - y0 * x1) / (y1 - y0);
+	        SET x0 = x1;
+	        SET x1 = rate;
+	
+	        IF (ABS(rate) < ACCEPTIBLE_PRECISION) THEN
+	            SET y = pv * (1 + nper * rate) + pmt * nper;
+	        ELSE
+	            SET f = EXP(nper * LN(1 + rate));
+	            SET y = pv * f + pmt * (1 / rate) * (f - 1);
+	        END IF;
+	
+	        SET y0 = y1;
+	        SET y1 = y;
+	        SET I = I + 1;
+        END WHILE;
+
+	    RETURN ROUND(rate * 1200, 2); 
+	END;
+	
+END MODULE;

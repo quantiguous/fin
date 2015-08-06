@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://fin" xmlns:tns="http://fin">
+      <xsd:element xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions" ibmSchExtn:docRoot="true" name="rate">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="noOfInstallments" nillable="true" type="xsd:int"/>
+                <xsd:element name="emiAmount" nillable="true" type="xsd:float"/>
+                <xsd:element name="loanAmount" nillable="true" type="xsd:float"/>
+            </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions" ibmSchExtn:docRoot="true" name="rateResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="rate" nillable="true" type="xsd:float"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>

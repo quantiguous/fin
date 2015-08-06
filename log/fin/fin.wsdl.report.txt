@@ -1,0 +1,13 @@
+
+
+Importing file: /home/iibadm/code/ritu/fin/fin.wsdl
+
+The WSDL import will proceed with bindings finHttpBinding.
+Creating wsdl schema document for platform:/resource/fin/fin.wsdl.
+Parsing wsdl binding {http://fin}finHttpBinding.
+Parsing wsdl binding input .
+Parsing wsdl binding output .
+Processing doc style for operation .
+Populating WSDL schema fin.xsd.
+Creating file fin.xsd in the workspace.
+Copying source WSDL fin.wsdl to fin.wsdl.
